@@ -62,9 +62,6 @@
     "vfile": "^5.3.5",
     "vfile-reporter": "^7.0.4"
   },
-  "engines": {
-    "node": ">=12"
-  },
   "type": "module",
   "dependencies": {
     "date-fns": "^2.29.3",
