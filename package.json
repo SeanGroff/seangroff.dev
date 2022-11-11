@@ -63,7 +63,7 @@
     "vfile-reporter": "^7.0.4"
   },
   "engines": {
-    "node": ">=16.7"
+    "node": ">=12"
   },
   "type": "module",
   "dependencies": {
