@@ -1,32 +1,32 @@
-import { compile } from "mdsvex";
-import { dev } from "$app/environment";
-import grayMatter from "gray-matter";
-import fetch from "node-fetch";
+import { compile } from 'mdsvex';
+import { dev } from '$app/environment';
+import grayMatter from 'gray-matter';
+import fetch from 'node-fetch';
 import {
-  GH_USER_REPO,
-  APPROVED_POSTERS_GH_USERNAME,
-  GH_PUBLISHED_TAGS,
-  REPO_OWNER,
-} from "./siteConfig";
-import parse from "parse-link-header";
-import { remark } from "remark";
-import remarkParse from "remark-parse";
-import remarkStringify from "remark-stringify";
-import rehypeStringify from "rehype-stringify";
-import rehypeSlug from "rehype-slug";
-import rehypeAutoLink from "rehype-autolink-headings";
+	GH_USER_REPO,
+	APPROVED_POSTERS_GH_USERNAME,
+	GH_PUBLISHED_TAGS,
+	REPO_OWNER
+} from './siteConfig';
+import parse from 'parse-link-header';
+import { remark } from 'remark';
+import remarkParse from 'remark-parse';
+import remarkStringify from 'remark-stringify';
+import rehypeStringify from 'rehype-stringify';
+import rehypeSlug from 'rehype-slug';
+import rehypeAutoLink from 'rehype-autolink-headings';
 
 const remarkPlugins = undefined;
 const rehypePlugins = [
-  rehypeStringify,
-  rehypeSlug,
-  [
-    rehypeAutoLink,
-    {
-      behavior: "wrap",
-      properties: { class: "hover:text-yellow-100 no-underline" },
-    },
-  ],
+	rehypeStringify,
+	rehypeSlug,
+	[
+		rehypeAutoLink,
+		{
+			behavior: 'wrap',
+			properties: { class: 'hover:text-yellow-100 no-underline' }
+		}
+	]
 ];
 
 let allBlogposts = [];
@@ -37,15 +37,15 @@ let allBlogposts = [];
  * @returns {string}
  */
 function slugify(text) {
-  return text
-    .toString() // Cast to string (optional)
-    .normalize("NFKD") // The normalize() using NFKD method returns the Unicode Normalization Form of a given string.
-    .toLowerCase() // Convert the string to lowercase letters
-    .trim() // Remove whitespace from both sides of a string (optional)
-    .replace(/\s+/g, "-") // Replace spaces with hyphen
-    .replace(/[^\w-]+/g, "") // Remove all non-word chars
-    .replace(/--+/g, "-") // Replace multiple hyphen with single hyphen
-    .replace(/(^-|-$)/g, ""); // Remove leading or trailing hyphen
+    return text
+        .toString()                 // Cast to string (optional)
+        .normalize('NFKD')          // The normalize() using NFKD method returns the Unicode Normalization Form of a given string.
+        .toLowerCase()              // Convert the string to lowercase letters
+        .trim()                     // Remove whitespace from both sides of a string (optional)
+        .replace(/\s+/g, '-')       // Replace spaces with hyphen
+		.replace(/[^\w-]+/g, '')   // Remove all non-word chars
+		.replace(/--+/g, '-')     // Replace multiple hyphen with single hyphen
+		.replace(/(^-|-$)/g, ''); // Remove leading or trailing hyphen
 }
 
 /**
@@ -53,85 +53,85 @@ function slugify(text) {
  * @returns {string}
  */
 function readingTime(text) {
-  let minutes = Math.ceil(text.trim().split(" ").length / 225);
-  return minutes > 1 ? `${minutes} minutes` : `${minutes} minute`;
+	let minutes = Math.ceil(text.trim().split(' ').length / 225);
+	return minutes > 1 ? `${minutes} minutes` : `${minutes} minute`;
 }
 
 export async function listContent() {
-  // use a diff var so as to not have race conditions while fetching
-  // TODO: make sure to handle this better when doing etags or cache restore
+	// use a diff var so as to not have race conditions while fetching
+	// TODO: make sure to handle this better when doing etags or cache restore
 
-  /** @type {import('./types').ContentItem[]} */
-  let _allBlogposts = [];
-  let next = null;
-  let limit = 0; // just a failsafe against infinite loop - feel free to remove
-  const authheader = process.env.GH_TOKEN && {
-    Authorization: `token ${process.env.GH_TOKEN}`,
-  };
-  let url =
-    `https://api.github.com/repos/${GH_USER_REPO}/issues?` +
-    new URLSearchParams({
-      state: "all",
-      labels: GH_PUBLISHED_TAGS.toString(),
-      per_page: "100",
-    });
-  // pull issues created by owner only if allowed author = repo owner
-  if (APPROVED_POSTERS_GH_USERNAME.length === 1 && APPROVED_POSTERS_GH_USERNAME[0] === REPO_OWNER) {
-    url += "&" + new URLSearchParams({ creator: REPO_OWNER });
-  }
-  do {
-    const res = await fetch(next?.url ?? url, {
-      headers: authheader,
-    });
+	/** @type {import('./types').ContentItem[]} */
+	let _allBlogposts = [];
+	let next = null;
+	let limit = 0; // just a failsafe against infinite loop - feel free to remove
+	const authheader = process.env.GH_TOKEN && {
+		Authorization: `token ${process.env.GH_TOKEN}`
+	};
+	let url =
+		`https://api.github.com/repos/${GH_USER_REPO}/issues?` +
+		new URLSearchParams({
+			state: 'all',
+			labels: GH_PUBLISHED_TAGS.toString(),
+			per_page: '100',
+		});
+	// pull issues created by owner only if allowed author = repo owner
+	if (APPROVED_POSTERS_GH_USERNAME.length === 1 && APPROVED_POSTERS_GH_USERNAME[0] === REPO_OWNER) {
+		url += '&' + new URLSearchParams({ creator: REPO_OWNER });
+	}
+	do {
+		const res = await fetch(next?.url ?? url, {
+			headers: authheader
+		});
 
-    const issues = await res.json();
-    if ("message" in issues && res.status > 400)
-      throw new Error(res.status + " " + res.statusText + "\n" + (issues && issues.message));
-    issues.forEach(
-      /** @param {import('./types').GithubIssue} issue */
-      (issue) => {
-        if (
-          // labels check not needed anymore as we have set the labels param in github api
-          // issue.labels.some((label) => GH_PUBLISHED_TAGS.includes(label.name)) &&
-          APPROVED_POSTERS_GH_USERNAME.includes(issue.user.login)
-        ) {
-          _allBlogposts.push(parseIssue(issue));
-        }
-      }
-    );
-    const headers = parse(res.headers.get("Link"));
-    next = headers && headers.next;
-  } while (next && limit++ < 1000); // just a failsafe against infinite loop - feel free to remove
-  _allBlogposts.sort((a, b) => b.date.valueOf() - a.date.valueOf()); // use valueOf to make TS happy https://stackoverflow.com/a/60688789/1106414
-  allBlogposts = _allBlogposts;
-  return _allBlogposts;
+		const issues = await res.json();
+		if ('message' in issues && res.status > 400)
+			throw new Error(res.status + ' ' + res.statusText + '\n' + (issues && issues.message));
+		issues.forEach(
+			/** @param {import('./types').GithubIssue} issue */
+			(issue) => {
+				if (
+					// labels check not needed anymore as we have set the labels param in github api
+					// issue.labels.some((label) => GH_PUBLISHED_TAGS.includes(label.name)) &&
+					APPROVED_POSTERS_GH_USERNAME.includes(issue.user.login)
+				) {
+					_allBlogposts.push(parseIssue(issue));
+				}
+			}
+		);
+		const headers = parse(res.headers.get('Link'));
+		next = headers && headers.next;
+	} while (next && limit++ < 1000); // just a failsafe against infinite loop - feel free to remove
+	_allBlogposts.sort((a, b) => b.date.valueOf() - a.date.valueOf()); // use valueOf to make TS happy https://stackoverflow.com/a/60688789/1106414
+	allBlogposts = _allBlogposts;
+	return _allBlogposts;
 }
 
 export async function getContent(slug) {
-  // get all blogposts if not already done - or in development
-  if (dev || allBlogposts.length === 0) {
-    console.log("loading allBlogposts");
-    allBlogposts = await listContent();
-    console.log("loaded " + allBlogposts.length + " blogposts");
-    if (!allBlogposts.length)
-      throw new Error(
-        "failed to load blogposts for some reason. check token" + process.env.GH_TOKEN
-      );
-  }
-  if (!allBlogposts.length) throw new Error("no blogposts");
-  // find the blogpost that matches this slug
-  const blogpost = allBlogposts.find((post) => post.slug === slug);
-  if (blogpost) {
-    const blogbody = blogpost.content
-      .replace(/\n{% youtube (.*?) %}/g, (_, x) => {
-        // https://stackoverflow.com/a/27728417/1106414
-        function youtube_parser(url) {
-          var rx =
-            /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|&v(?:i)?=))([^#&?]*).*/;
-          return url.match(rx)[1];
-        }
-        const videoId = x.startsWith("https://") ? youtube_parser(x) : x;
-        return `<iframe
+	// get all blogposts if not already done - or in development
+	if (dev || allBlogposts.length === 0) {
+		console.log('loading allBlogposts');
+		allBlogposts = await listContent();
+		console.log('loaded ' + allBlogposts.length + ' blogposts');
+		if (!allBlogposts.length)
+			throw new Error(
+				'failed to load blogposts for some reason. check token' + process.env.GH_TOKEN
+			);
+	}
+	if (!allBlogposts.length) throw new Error('no blogposts');
+	// find the blogpost that matches this slug
+	const blogpost = allBlogposts.find((post) => post.slug === slug);
+	if (blogpost) {
+		const blogbody = blogpost.content
+			.replace(/\n{% youtube (.*?) %}/g, (_, x) => {
+				// https://stackoverflow.com/a/27728417/1106414
+				function youtube_parser(url) {
+					var rx =
+						/^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|&v(?:i)?=))([^#&?]*).*/;
+					return url.match(rx)[1];
+				}
+				const videoId = x.startsWith('https://') ? youtube_parser(x) : x;
+				return `<iframe
 			class="w-full object-contain"
 			srcdoc="
 				<style>
@@ -175,32 +175,32 @@ export async function getContent(slug) {
 			height="400"
 			allowFullScreen
 			aria-hidden="true"></iframe>`;
-      })
-      .replace(/\n{% (tweet|twitter) (.*?) %}/g, (_, _2, x) => {
-        const url = x.startsWith("https://twitter.com/") ? x : `https://twitter.com/x/status/${x}`;
-        return `
+			})
+			.replace(/\n{% (tweet|twitter) (.*?) %}/g, (_, _2, x) => {
+				const url = x.startsWith('https://twitter.com/') ? x : `https://twitter.com/x/status/${x}`;
+				return `
 					<blockquote class="twitter-tweet" data-lang="en" data-dnt="true" data-theme="dark">
 					<a href="${url}"></a></blockquote> 
 					<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 					`;
-      });
+			});
 
-    // compile it with mdsvex
-    const content = (
-      await compile(blogbody, {
-        remarkPlugins,
-        // @ts-ignore
-        rehypePlugins,
-      })
-    ).code
-      // https://github.com/pngwn/MDsveX/issues/392
-      .replace(/>{@html `<code class="language-/g, '><code class="language-')
-      .replace(/<\/code>`}<\/pre>/g, "</code></pre>");
+		// compile it with mdsvex
+		const content = (
+			await compile(blogbody, {
+				remarkPlugins,
+				// @ts-ignore
+				rehypePlugins
+			})
+		).code
+			// https://github.com/pngwn/MDsveX/issues/392
+			.replace(/>{@html `<code class="language-/g, '><code class="language-')
+			.replace(/<\/code>`}<\/pre>/g, '</code></pre>');
 
-    return { ...blogpost, content };
-  } else {
-    throw new Error("Blogpost not found for slug: " + slug);
-  }
+		return { ...blogpost, content };
+	} else {
+		throw new Error('Blogpost not found for slug: ' + slug);
+	}
 }
 
 /**
@@ -208,56 +208,60 @@ export async function getContent(slug) {
  * @returns {import('./types').ContentItem}
  */
 function parseIssue(issue) {
-  const src = issue.body;
-  const { content, data } = grayMatter(src);
-  let title = data.title ?? issue.title;
-  let slug;
-  if (data.slug) {
-    slug = data.slug;
-  } else {
-    slug = slugify(title);
-  }
-  let description = data.description ?? content.trim().split("\n")[0];
-  // extract plain text from markdown
-  description = remark().use(remarkParse).use(remarkStringify).processSync(description).toString();
-  description = description.replace(/\n/g, " ");
-  // strip html
-  description = description.replace(/<[^>]*>?/gm, "");
-  // strip markdown
-  description = description.replace(/[[\]]/gm, "");
-  // strip markdown
-  description = description.replace(/[[\]]/gm, "");
+	const src = issue.body;
+	const { content, data } = grayMatter(src);
+	let title = data.title ?? issue.title;
+	let slug;
+	if (data.slug) {
+		slug = data.slug;
+	} else {
+		slug = slugify(title);
+	}
+	let description = data.description ?? content.trim().split('\n')[0];
+	// extract plain text from markdown
+	description = remark()
+		.use(remarkParse)
+		.use(remarkStringify)
+		.processSync(description)
+		.toString();
+	description = description.replace(/\n/g, ' ');
+	// strip html
+	description = description.replace(/<[^>]*>?/gm, '');
+	// strip markdown
+	description = description.replace(/[[\]]/gm, '');
+	// strip markdown
+	description = description.replace(/[[\]]/gm, '');
 
-  // you may wish to use a truncation approach like this instead...
-  // let description = (data.content.length > 300) ? data.content.slice(0, 300) + '...' : data.content
+	// you may wish to use a truncation approach like this instead...
+	// let description = (data.content.length > 300) ? data.content.slice(0, 300) + '...' : data.content
 
-  /** @type {string[]} */
-  let tags = [];
-  if (data.tags) tags = Array.isArray(data.tags) ? data.tags : [data.tags];
-  tags = tags.map((tag) => tag.toLowerCase());
-  // console.log(slug, tags);
+	/** @type {string[]} */
+	let tags = [];
+	if (data.tags) tags = Array.isArray(data.tags) ? data.tags : [data.tags];
+	tags = tags.map((tag) => tag.toLowerCase());
+	// console.log(slug, tags);
 
-  return {
-    type: "blog", // futureproof in case you want to add other types of content
-    content,
-    frontmatter: data,
-    title,
-    subtitle: data.subtitle,
-    description,
-    category: data.category?.toLowerCase() || "blog",
-    tags,
-    image: data.image ?? data.cover_image,
-    canonical: data.canonical, // for canonical URLs of something published elsewhere
-    slug: slug.toString().toLowerCase(),
-    date: new Date(data.date ?? issue.created_at),
-    readingTime: readingTime(content),
-    ghMetadata: {
-      issueUrl: issue.html_url,
-      commentsUrl: issue.comments_url,
-      title: issue.title,
-      created_at: issue.created_at,
-      updated_at: issue.updated_at,
-      reactions: issue.reactions,
-    },
-  };
+	return {
+		type: 'blog', // futureproof in case you want to add other types of content
+		content,
+		frontmatter: data,
+		title,
+		subtitle: data.subtitle,
+		description,
+		category: data.category?.toLowerCase() || 'blog',
+		tags,
+		image: data.image ?? data.cover_image,
+		canonical: data.canonical, // for canonical URLs of something published elsewhere
+		slug: slug.toString().toLowerCase(),
+		date: new Date(data.date ?? issue.created_at),
+		readingTime: readingTime(content),
+		ghMetadata: {
+			issueUrl: issue.html_url,
+			commentsUrl: issue.comments_url,
+			title: issue.title,
+			created_at: issue.created_at,
+			updated_at: issue.updated_at,
+			reactions: issue.reactions
+		}
+	};
 }

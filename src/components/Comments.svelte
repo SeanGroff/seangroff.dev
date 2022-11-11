@@ -1,32 +1,32 @@
-<script lang="ts">
-  import type { GHComment, GHMetadata } from "$lib/types";
-  export let ghMetadata: GHMetadata;
-  let data: GHComment[] = [];
-  import { onMount } from "svelte";
-  onMount(async () => {
-    data = await (await fetch(ghMetadata.commentsUrl)).json();
-  });
-  import Comment from "./Comment.svelte";
+<script>
+	/** @type {import('$lib/types').GHMetadata} */
+	export let ghMetadata;
+	let data = [];
+	import { onMount } from 'svelte';
+	onMount(async () => {
+		data = await (await fetch(ghMetadata.commentsUrl)).json();
+	});
+	import Comment from './Comment.svelte';
 </script>
 
 <div class="prose mb-8 w-full dark:prose-invert">
-  {#each data as comment}
-    <Comment {comment} />
-  {/each}
+	{#each data as comment}
+		<Comment {comment} />
+	{/each}
 </div>
 <a
-  href={`${ghMetadata.issueUrl}#issuecomment-new`}
-  rel="noreferrer"
-  target="_blank"
-  class="flex justify-center border-y border-blue-700 p-4 no-underline hover:text-yellow-700 dark:hover:text-yellow-200 sm:inline sm:rounded-xl sm:border-x"
+	href={`${ghMetadata.issueUrl}#issuecomment-new`}
+	rel="external"
+	target="_blank"
+	class="flex justify-center border-y border-blue-700 p-4 no-underline hover:text-yellow-700 dark:hover:text-yellow-200 sm:inline sm:rounded-xl sm:border-x"
 >
-  Leave a new comment!
+	Leave a new comment!
 </a>
 
 <!-- <pre class="prose dark:prose-invert">
   {JSON.stringify(data, null, 2)}
 </pre> -->
-<!--
+<!-- 
 {
   "url": "https://api.github.com/repos/sw-yx/swyxkit/issues/comments/1008454294",
   "html_url": "https://github.com/sw-yx/swyxkit/issues/10#issuecomment-1008454294",

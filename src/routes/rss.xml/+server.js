@@ -1,33 +1,33 @@
-import RSS from "rss";
-import { SITE_TITLE, SITE_URL } from "$lib/siteConfig";
-import { listContent } from "$lib/content";
+import RSS from 'rss';
+import { SITE_TITLE, SITE_URL } from '$lib/siteConfig';
+import { listContent } from '$lib/content';
 
 // Reference: https://github.com/sveltejs/kit/blob/master/examples/hn.svelte.dev/src/routes/%5Blist%5D/rss.js
 /** @type {import('@sveltejs/kit').RequestHandler} */
 export async function GET() {
-  const feed = new RSS({
-    title: SITE_TITLE + " RSS Feed",
-    site_url: SITE_URL,
-    feed_url: SITE_URL + "/api/rss.xml",
-  });
+	const feed = new RSS({
+		title: SITE_TITLE + ' RSS Feed',
+		site_url: SITE_URL,
+		feed_url: SITE_URL + '/api/rss.xml'
+	});
 
-  const allBlogs = await listContent();
-  allBlogs.forEach((post) => {
-    feed.item({
-      title: post.title,
-      url: SITE_URL + `/${post.slug}`,
-      date: post.date,
-      description: post.description,
-    });
-  });
+	const allBlogs = await listContent();
+	allBlogs.forEach((post) => {
+		feed.item({
+			title: post.title,
+			url: SITE_URL + `/${post.slug}`,
+			date: post.date,
+			description: post.description
+		});
+	});
 
-  // Suggestion (check for correctness before using):
-  return new Response(feed.xml({ indent: true }), {
-    headers: {
-      "Cache-Control": `max-age=0, s-maxage=${600}`, // 10 minutes
-      "Content-Type": "application/rss+xml",
-    },
-  });
+	// Suggestion (check for correctness before using):
+	return new Response(feed.xml({ indent: true }), {
+		headers: {
+			'Cache-Control': `max-age=0, s-maxage=${600}`, // 10 minutes
+			'Content-Type': 'application/rss+xml'
+		}
+	});
 }
 
 // misc notes for future users

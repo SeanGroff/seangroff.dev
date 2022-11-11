@@ -73,6 +73,7 @@ See https://swyxkit.netlify.app/ (see [Deploy Logs](https://app.netlify.com/site
   - Design system sandbox/"Storybook" setup:
     - `npm run story:dev` to view it on http://localhost:6006/. This is also included in your `npm start` command.
 
+
 This is a partial implementation of https://www.swyx.io/the-surprisingly-high-table-stakes-of-modern-blogs/
 
 ## Setup
@@ -107,18 +108,18 @@ ntl init # Use the Netlify cli to deploy, assuming you already installed it and 
 As you become ready to seriously adopt this, remember to configure `/lib/siteConfig.js` - just some hardcoded vars I want you to remember to configure.
 
 ```js
-export const SITE_URL = "https://swyxkit.netlify.app";
-export const APPROVED_POSTERS_GH_USERNAME = ["sw-yx"]; // IMPORTANT: change this to at least your GitHub username, or add others if you want
-export const GH_USER_REPO = "sw-yx/swyxkit"; // Used for pulling GitHub issues and offering comments
-export const REPO_URL = "https://github.com/" + GH_USER_REPO;
-export const SITE_TITLE = "SwyxKit";
+export const SITE_URL = 'https://swyxkit.netlify.app';
+export const APPROVED_POSTERS_GH_USERNAME = ['sw-yx']; // IMPORTANT: change this to at least your GitHub username, or add others if you want
+export const GH_USER_REPO = 'sw-yx/swyxkit'; // Used for pulling GitHub issues and offering comments
+export const REPO_URL = 'https://github.com/' + GH_USER_REPO;
+export const SITE_TITLE = 'SwyxKit';
 export const SITE_DESCRIPTION = "swyx's default SvelteKit + Tailwind starter";
 export const DEFAULT_OG_IMAGE =
-  "https://user-images.githubusercontent.com/6764957/147861359-3ad9438f-41d1-47c8-aa05-95c7d18497f0.png";
-export const MY_TWITTER_HANDLE = "swyx";
-export const MY_YOUTUBE = "https://youtube.com/swyxTV";
-export const POST_CATEGORIES = ["Blog"]; // Other categories you can consider adding: Talks, Tutorials, Snippets, Podcasts, Notes...
-export const GH_PUBLISHED_TAGS = ["Published"]; // List of allowed issue labels, only the issues having at least one of these labels will show on the blog.
+	'https://user-images.githubusercontent.com/6764957/147861359-3ad9438f-41d1-47c8-aa05-95c7d18497f0.png';
+export const MY_TWITTER_HANDLE = 'swyx';
+export const MY_YOUTUBE = 'https://youtube.com/swyxTV';
+export const POST_CATEGORIES = ['Blog']; // Other categories you can consider adding: Talks, Tutorials, Snippets, Podcasts, Notes...
+export const GH_PUBLISHED_TAGS = ['Published']; // List of allowed issue labels, only the issues having at least one of these labels will show on the blog.
 ```
 
 Of course, you should then go page by page (there aren't that many) and customize some of the other hardcoded items, for example:
