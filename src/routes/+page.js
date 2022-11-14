@@ -1,4 +1,4 @@
-import { error } from '@sveltejs/kit';
+import { error } from "@sveltejs/kit";
 // export const prerender = true; // turned off so it refreshes quickly
 export async function load({ setHeaders, fetch }) {
   const res = await fetch(`/api/listContent.json`);
@@ -11,7 +11,7 @@ export async function load({ setHeaders, fetch }) {
   /** @type {import('$lib/types').ContentItem[]} */
   const items = await res.json();
   setHeaders({
-    'cache-control': 'public, max-age=60' // 1 minute
+    "cache-control": "public, max-age=60", // 1 minute
   });
   return { items };
 }

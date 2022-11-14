@@ -1,4 +1,4 @@
-name: 'githubstatusblogpostlink'
+name: "githubstatusblogpostlink"
 on: # run on any PRs and main branch changes
   issues:
     types: [opened, edited, labeled, unlabeled]
@@ -12,7 +12,7 @@ jobs:
         uses: Sibz/github-status-action@v1
         with:
           authToken: ${{secrets.GITHUB_TOKEN}}
-          context: 'Test run'
-          description: 'Passed'
-          state: 'success'
+          context: "Test run"
+          description: "Passed"
+          state: "success"
           sha: ${{github.event.pull_request.head.sha || github.sha}}

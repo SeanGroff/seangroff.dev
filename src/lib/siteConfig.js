@@ -1,4 +1,4 @@
-export const SITE_URL = "https://cozy-stardust-c36ee9.netlify.app";
+export const SITE_URL = "https://seangroff.netlify.app";
 export const APPROVED_POSTERS_GH_USERNAME = ["SeanGroff"];
 export const GH_USER_REPO = "SeanGroff/seangroff.dev_sveltekit"; // used for pulling github issues and offering comments
 export const SITE_TITLE = "Sean Groff";
