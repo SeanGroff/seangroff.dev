@@ -47,7 +47,7 @@
   >
     <p class="flex items-center text-sm text-gray-700 dark:text-gray-300">Sean Groff</p>
     <p class="min-w-32 flex items-center text-sm text-gray-600 dark:text-gray-400 md:mt-0">
-      <a href={json.ghMetadata.issueUrl} rel="external" class="no-underline" target="_blank">
+      <a href={json.ghMetadata.issueUrl} rel="noreferrer" class="no-underline" target="_blank">
         <span class="mr-4 font-mono text-xs text-gray-700 text-opacity-70 dark:text-gray-300"
           >{json.ghMetadata.reactions.total_count} reactions</span
         >
