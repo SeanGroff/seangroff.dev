@@ -1,7 +1,7 @@
 <script>
   import "../tailwind.css";
   import Nav from "../components/Nav.svelte";
-  import { MY_TWITTER_HANDLE, MY_YOUTUBE, REPO_URL, SITE_TITLE } from "$lib/siteConfig";
+  import { MY_TWITTER_HANDLE, MY_LINKEDIN, REPO_URL, SITE_TITLE } from "$lib/siteConfig";
 </script>
 
 <svelte:head>
@@ -52,15 +52,10 @@
         class="text-gray-500 transition hover:text-gray-300"
         target="_blank"
         rel="noopener noreferrer"
-        href={MY_YOUTUBE}
+        href={MY_LINKEDIN}
       >
-        YouTube
+        LinkedIn
       </a>
     </div>
   </div>
-  <p class="prose px-4 dark:prose-invert sm:px-8">
-    This blog is based on the
-    <a href="https://swyxkit.netlify.app/">swyxkit</a>
-    template.
-  </p>
 </footer>

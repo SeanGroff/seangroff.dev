@@ -41,31 +41,29 @@
   <div class="flex flex-col-reverse items-start sm:flex-row">
     <div class="flex flex-col pr-8">
       <h1 class="mb-3 text-3xl font-bold tracking-tight text-black dark:text-white md:text-5xl">
-        This is
+        I'm
 
         <span
           class="relative ml-2 inline-block before:absolute before:-inset-1 before:block before:-skew-y-3 before:bg-red-500"
         >
           <span class="relative skew-y-3 text-yellow-400">{SITE_TITLE}</span>
         </span>
-        !
+        👋🏻
       </h1>
       <h2 class="mb-4 text-gray-700 dark:text-gray-200">
-        An opinionated blog starter for <span class="font-semibold"
-          >SvelteKit + Tailwind + Netlify.</span
+        A Senior Frontend Software Engineer experienced with <span class="font-semibold"
+          >React + TypeScript + Tailwind.</span
         >
-        Refreshed
-        <a href="https://github.com/sveltejs/kit/discussions/5774"
-          >the great SvelteKit redesign of Summer 2022</a
+        I'm pashionate about building great user experiences and staying up to date with the latest web
+        tech.
+        <a href="https://kit.svelte.dev" rel="noreferrer" target="_blank"
+          >Which is why I built this site with SvelteKit</a
         >
       </h2>
       <p class="mb-16 text-gray-600 dark:text-gray-400">
-        <a href={REPO_URL}>View source here!</a>
+        <a href={REPO_URL} rel="noreferrer" target="_blank">View source here!</a>
       </p>
     </div>
-    <!-- <div
-				class="w-[80px] h-[80px] rounded-full sm:w-[176px] sm:h-[136px] relative mb-8 sm:mb-0 mr-auto bg-cyan-300 bg-opacity-25"
-			/> -->
   </div>
 
   <section class="mb-16 w-full">

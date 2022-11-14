@@ -77,9 +77,15 @@
     Blog
   </h1>
   <p class="mb-4 text-gray-600 dark:text-gray-400">
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laborum sunt reprehenderit alias rerum
-    dolor impedit. In total, I've written {items.length} articles on my blog. Use the search below to
-    filter by title.
+    Since 1999, where I built my first website on <a
+      href="https://en.wikipedia.org/wiki/Yahoo!_GeoCities"
+      target="_blank"
+      rel="noreferrer">Geocities</a
+    >, creating great user experiences visible by anyone with an internet connection has been my
+    passion.
+  </p>
+  <p class="mb-4 text-gray-600 dark:text-gray-400">
+    In total, I've written {items.length} articles on my blog. Use the search below to filter by title.
   </p>
   <div class="relative mb-4 w-full">
     <input
@@ -133,10 +139,10 @@
   <!-- you can hardcode yourmost popular posts or pinned post here if you wish -->
   {#if !search}
     <h3 class="mt-8 mb-4 text-2xl font-bold tracking-tight text-black dark:text-white md:text-4xl">
-      Most Popular
+      Featured Post
     </h3>
-    <IndexCard href="/welcome" title="Welcome to swyxkit!" stringData="123,456 views">
-      This is swyx's preferred starter for Svelte projects!
+    <IndexCard href="#" title="Placeholder!" stringData="1337 views">
+      Placeholder for a pinned post.
     </IndexCard>
 
     <h3 class="mt-8 mb-4 text-2xl font-bold tracking-tight text-black dark:text-white md:text-4xl">

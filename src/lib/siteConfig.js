@@ -5,7 +5,7 @@ export const SITE_TITLE = "Sean Groff";
 export const SITE_DESCRIPTION = "Sean Groff's personal web development blog";
 export const DEFAULT_OG_IMAGE = "https://avatars.githubusercontent.com/u/4367312?v=4.png";
 export const MY_TWITTER_HANDLE = "_SeanGroff";
-export const MY_YOUTUBE = "https://youtube.com/SeanGroff";
+export const MY_LINKEDIN = "https://www.linkedin.com/in/seangroff";
 export const POST_CATEGORIES = ["Blog"]; // Other categories you can consider adding: Talks, Tutorials, Snippets, Podcasts, Notes...
 export const GH_PUBLISHED_TAGS = ["Published"];
 

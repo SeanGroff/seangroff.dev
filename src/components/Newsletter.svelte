@@ -4,9 +4,7 @@
     isNewsletterOpen = !isNewsletterOpen;
   }
   function onSubmit() {
-    alert(
-      "This newsletter section is not yet implemented! if you are seeing this outside of swyxkit then go remind the site author to update Newsletter.svelte."
-    );
+    alert("Newletter coming soon ™️. For now, follow me on Twitter @_SeanGroff");
   }
 </script>
 
@@ -54,24 +52,26 @@
     {#if isNewsletterOpen}
       <p class="my-1 text-gray-800 dark:text-gray-200">
         Get emails from me about <span class="font-bold"
-          >Lorem ipsum dolor sit, amet consectetur adipisicing elit. Libero, ducimus.</span
+          >my latest blogposts, frontend tech news, and more</span
         >.
       </p>
       <form class="relative my-4" on:submit={onSubmit}>
         <input
           type="email"
           aria-label="Email for newsletter"
-          placeholder="tim@apple.com"
+          placeholder="you@email.com"
           autocomplete="email"
           required={true}
+          disabled={true}
           class="mt-1 block w-full rounded-md border-gray-300 bg-white px-4 py-2 pr-32 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100"
         /><button
           class="absolute right-1 top-1 flex h-8 w-28 items-center justify-center rounded bg-gray-100 px-4 pt-1 font-medium text-gray-900 dark:bg-gray-700 dark:text-gray-100"
-          type="submit">Subscribe</button
+          type="submit"
+          disabled>Subscribe</button
         >
       </form>
       <p class="text-sm text-gray-800 dark:text-gray-200">
-        3 subscribers including my Mom – <a href="/#newsletter">23 issues</a>
+        Coming Soon – <a href="/#newsletter">0 issues</a>
       </p>
     {/if}
   </div>
