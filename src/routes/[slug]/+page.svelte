@@ -12,7 +12,6 @@
 
   /** @type {import('$lib/types').ContentItem} */
   $: json = data.json; // warning: if you try to destructure content here, make sure to make it reactive, or your page content will not update when your user navigates
-
   $: canonical = SITE_URL + $page.url.pathname;
 </script>
 
@@ -58,6 +57,9 @@
   <div
     class="-mx-4 my-2 flex h-1 w-[100vw] bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 sm:mx-0 sm:w-full"
   />
+  {#if json.image}
+    <img src={json.image} alt={json.title} class="w-full" />
+  {/if}
   {@html json.content}
   <!-- <div class="seangroffcontent prose mt-16 mb-32 w-full max-w-none flex-row dark:prose-invert">
 	</div> -->
