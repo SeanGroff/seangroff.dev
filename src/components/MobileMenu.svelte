@@ -1,4 +1,5 @@
 <script>
+  import { REPO_URL } from "$lib/siteConfig";
   let isOpen = false;
   let isMenuRendered;
   $: {
@@ -100,7 +101,7 @@
         <a
           class="flex w-auto pb-4"
           on:click={() => setTimeout(() => (isOpen = false), 300)}
-          href="https://github.com/sw-yx/swyxkit">GitHub</a
+          href={REPO_URL}>GitHub</a
         >
       </li>
       <!-- <li
