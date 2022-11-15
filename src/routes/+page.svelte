@@ -13,6 +13,10 @@
 
   /** @type {import('./$types').PageData} */
   export let data;
+
+  $: featuredPosts = data.items.slice(0, 10).filter((post) => {
+    return post.frontmatter.featured === "yes";
+  });
   // technically this is a slighlty different type because doesnt have 'content' but we'll let it slide
   /** @type {import('$lib/types').ContentItem[]} */
   $: items = data.items.slice(0, 10);
@@ -66,20 +70,18 @@
     </div>
   </div>
 
-  <section class="mb-16 w-full">
-    <h3 class="mb-6 text-2xl font-bold tracking-tight text-black dark:text-white md:text-4xl">
-      Featured Posts
-    </h3>
-    <div class="flex flex-col gap-6 md:flex-row">
-      <FeatureCard title="Welcome to swyxkit 2022!" href="/welcome" stringData="Jan 2022" />
-      <FeatureCard
-        title="Moving to a GitHub CMS"
-        href="/moving-to-a-github-cms"
-        stringData="Jan 2022"
-      />
-      <FeatureCard title="HTML Ipsum demo" href="/moo" stringData="Jan 2022" />
-    </div>
-  </section>
+  {#if featuredPosts?.length}
+    <section class="mb-16 w-full">
+      <h3 class="mb-6 text-2xl font-bold tracking-tight text-black dark:text-white md:text-4xl">
+        Featured Posts
+      </h3>
+      <div class="flex flex-col gap-6 md:flex-row">
+        {#each featuredPosts as post}
+          <FeatureCard title={post.title} href={post.slug} stringData={post.frontmatter.date} />
+        {/each}
+      </div>
+    </section>
+  {/if}
   <!-- <section class="w-full mb-16">
 		<pre>{JSON.stringify(speaking, null, 2)}</pre>
 	</section> -->
