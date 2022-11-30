@@ -58,7 +58,7 @@
         A Senior Frontend Software Engineer experienced with <span class="font-semibold"
           >React + TypeScript + Tailwind.</span
         >
-        I'm pashionate about building great user experiences and staying up to date with the latest web
+        I'm passionate about building great user experiences and staying up to date with the latest web
         tech.
         <a href="https://kit.svelte.dev" rel="noreferrer" target="_blank"
           >Which is why I built this site with SvelteKit</a
