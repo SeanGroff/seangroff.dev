@@ -13,13 +13,22 @@
     "typecheck": "tsc --skipLibCheck"
   },
   "dependencies": {
+    "@mdx-js/mdx": "^2.3.0",
     "@netlify/functions": "^1.3.0",
     "@remix-run/netlify": "^1.13.0",
     "@remix-run/node": "^1.13.0",
     "@remix-run/react": "^1.13.0",
     "cross-env": "^7.0.3",
+    "gray-matter": "^4.0.3",
+    "parse": "^4.0.1",
+    "parse-link-header": "^2.0.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "rehype-autolink-headings": "^6.1.1",
+    "rehype-slug": "^5.1.0",
+    "rehype-stringify": "^9.0.3",
+    "remark": "^14.0.2",
+    "remark-stringify": "^10.0.2"
   },
   "devDependencies": {
     "@remix-run/dev": "^1.13.0",

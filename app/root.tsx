@@ -1,10 +1,11 @@
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from "@remix-run/react";
+import { SITE_TITLE } from "~/lib/siteConfig";
 
 import type { MetaFunction } from "@remix-run/node";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
-  title: "New Remix App",
+  title: SITE_TITLE,
   viewport: "width=device-width,initial-scale=1",
 });
 
