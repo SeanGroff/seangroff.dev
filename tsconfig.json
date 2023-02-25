@@ -1,39 +1,22 @@
 {
-  "extends": "./.svelte-kit/tsconfig.json",
+  "include": ["remix.env.d.ts", "./app/**/*.ts", "./app/**/*.tsx"],
+  "exclude": ["node_modules"],
   "compilerOptions": {
-    "moduleResolution": "node",
-    "module": "es2020",
-    "lib": ["es2021"],
-    "target": "es2021",
-    /**
-			svelte-preprocess cannot figure out whether you have a value or a type, so tell TypeScript
-			to enforce using \`import type\` instead of \`import\` for Types.
-			*/
-    "importsNotUsedAsValues": "error",
+    "lib": ["DOM", "DOM.Iterable", "ES2019"],
     "isolatedModules": true,
-    "resolveJsonModule": true,
-    /**
-			To have warnings/errors of the Svelte compiler at the correct position,
-			enable source maps by default.
-			*/
-    "sourceMap": true,
     "esModuleInterop": true,
-    "skipLibCheck": true,
+    "jsx": "react-jsx",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "target": "ES2019",
+    "strict": true,
+    "allowJs": true,
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
-    "allowJs": true,
-    "checkJs": true,
     "paths": {
-      "$lib": ["src/lib"],
-      "$lib/*": ["src/lib/*"]
-    }
-  },
-  "include": [
-    "src/**/*.d.ts",
-    "src/**/*.js",
-    "src/**/*.ts",
-    "src/**/*.svelte",
-    "src/lib/content.js",
-    "src/lib/types.d.ts"
-  ]
+      "~/*": ["./app/*"]
+    },
+    // Remix takes care of building everything in `remix build`.
+    "noEmit": true
+  }
 }
